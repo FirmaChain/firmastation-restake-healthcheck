@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { sendHealthErrorMessage } from 'src/components/telegram';
-import { RESTAKE_HEALTH_PATH, RESTAKE_HEALTH_URL } from 'src/config';
+import { sendApiHealthErrorMessage, sendSchedulerHealthErrorMessage } from 'src/components/telegram';
+import { SCHEDULER_HEALTH_URL, SCHEDULER_HEALTH_PATH, API_HEALTH_URL, API_HEALTH_PATH } from 'src/config';
 import { getAxios } from 'src/utils/axios';
 
 @Injectable()
@@ -10,22 +10,34 @@ export class SchedulerService {
   }
   
   @Cron(CronExpression.EVERY_MINUTE, {
-    name: 'healthcheck_handling',
+    name: 'scheduler_healthcheck_handling',
     timeZone: 'Etc/UTC'
   })
-  async healthCheckCron() {
-    const healthCheck = await this.getStatus();
+  async schedulerHealthCheckCron() {
+    const healthCheck = await this.getStatus(SCHEDULER_HEALTH_URL, SCHEDULER_HEALTH_PATH);
 
     if (!healthCheck) {
-      await sendHealthErrorMessage();
+      await sendSchedulerHealthErrorMessage();
     }
   }
 
-  async getStatus() {
+  @Cron(CronExpression.EVERY_MINUTE, {
+    name: 'api_healthcheck_handling',
+    timeZone: 'Etc/UTC'
+  })
+  async apiHealthCheckCron() {
+    const healthCheck = await this.getStatus(API_HEALTH_URL, API_HEALTH_PATH);
+
+    if (!healthCheck) {
+      await sendApiHealthErrorMessage();
+    }
+  }
+
+  async getStatus(url, path) {
     let healthCheck = false;
 
     try {
-      await getAxios(RESTAKE_HEALTH_URL, RESTAKE_HEALTH_PATH);
+      await getAxios(url, path);
       healthCheck = true;
     } catch (e) {
       healthCheck = false;
