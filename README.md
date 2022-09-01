@@ -20,16 +20,28 @@
 
 - Set the variables in config
   ```bash
-  RESTAKE_HEALTH_URL
-   - http://'restake ip:port & domain'/
+  SCHEDULER_HEALTH_URL
+   - http://'restake scheduler ip:port & domain'/
 
-  RESTAKE_HEALTH_PATH
-   - '/restake/health'
+  SCHEDULER_HEALTH_PATH
+   - 'scheduler health path'
 
-  TELEGRAM_HEALTH_BOT_TOKEN
-   - 'telegram bot token'
+  SCHEDULER_HEALTH_BOT_TOKEN
+   - 'scheduler telegram bot token'
 
-  TELEGRAM_HEALTH_BOT_CHATID
+  SCHEDULER_HEALTH_BOT_CHATID
+   - 'The CHATID of the Telegram room where the bot is participating.'
+
+  API_HEALTH_URL
+   - http://'restake api ip:port & domain'/
+
+  API_HEALTH_PATH
+   - 'api health path'
+
+  API_HEALTH_BOT_TOKEN
+   - 'api telegram bot token'
+
+  API_HEALTH_BOT_CHATID
    - 'The CHATID of the Telegram room where the bot is participating.'
   ```
 
